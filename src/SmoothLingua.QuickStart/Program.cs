@@ -15,7 +15,9 @@ trainer.Train(new Domain(
         new ("Bad",
         ["I am feeling bad", "I am not good"]),
         new ("Bye",
-        ["Good bye", "Bye"])
+        ["Good bye", "Bye"]),
+        new ("IAmFrom",
+        ["I am from USA", "I aam from Bulgaria", "I am from Germany"])
     ],
     [
         new ("Good",
@@ -23,7 +25,9 @@ trainer.Train(new Domain(
             new IntentStep("Greeting"),
             new ResponseStep("Hello from bot!"),
             new IntentStep("Good"),
-            new ResponseStep("I am glad to hear that!")
+            new ResponseStep("I am glad to hear that! \n Where are you from?"),
+            new IntentStep("IAmFrom"),
+            new ResponseStep("It is nice in {country}")
         ]),
         new ("Bad",
         [
@@ -35,7 +39,9 @@ trainer.Train(new Domain(
     ],
     [
         new ("Bye","Bye","Bye")
-    ]
+    ],
+    new List<Slot>() { new Slot("country", "IAmFrom", "country", "") },
+    new List<Entity>() {  new Entity("country", new HashSet<string>() { "Bulgaria", "USA", "Germany" }) }
     ), memoryStream, default).Wait();
 
 var conversationId = Guid.NewGuid().ToString();
@@ -58,6 +64,14 @@ foreach (var text in response.Messages)
 }
 
 response = agent.Handle(conversationId, "I am fine");
+Console.WriteLine($"Intent:{response.IntentName}");
+
+foreach (var text in response.Messages)
+{
+    Console.WriteLine($"Response:{text}");
+}
+
+response = agent.Handle(conversationId, "I am from Bulgaria");
 Console.WriteLine($"Intent:{response.IntentName}");
 
 foreach (var text in response.Messages)

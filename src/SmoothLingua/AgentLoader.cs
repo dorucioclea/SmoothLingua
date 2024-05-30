@@ -26,7 +26,7 @@ public class AgentLoader
         var ruleManagerFactory = new RuleManagerFactory(domain.Rules);
         var storyManagerFactory = new StoryManagerFactory(domain.Stories);
 
-        return new Agent(predictor, new ConversationManager(ruleManagerFactory, storyManagerFactory));
+        return new Agent(predictor, new ConversationManager(ruleManagerFactory, storyManagerFactory, domain));
     }
 
     public static async Task<IAgent> Load(Stream stream, CancellationToken cancellationToken = default)
@@ -36,7 +36,7 @@ public class AgentLoader
         var ruleManagerFactory = new RuleManagerFactory(domain.Rules);
         var storyManagerFactory = new StoryManagerFactory(domain.Stories);
 
-        return new Agent(predictor, new ConversationManager(ruleManagerFactory, storyManagerFactory));
+        return new Agent(predictor, new ConversationManager(ruleManagerFactory, storyManagerFactory, domain));
     }
 
     private static async Task<Domain> GetDomain(Stream stream, CancellationToken cancellationToken = default)
